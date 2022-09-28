@@ -3,6 +3,7 @@ package com.dtg.DummyAuthorizationServer.config;
 import com.dtg.DummyAuthorizationServer.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,8 +20,7 @@ public class SecurityConfig {
         return http.authorizeRequests(authorizeRequests ->
             authorizeRequests.anyRequest().authenticated()
         )
-                .formLogin()
-                .and()
+                .formLogin(Customizer.withDefaults())
                 .build();
     }
 
@@ -31,6 +31,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(5);
     }
 }

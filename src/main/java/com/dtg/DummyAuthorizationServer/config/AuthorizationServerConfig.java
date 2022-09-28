@@ -19,6 +19,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
 import org.springframework.security.web.SecurityFilterChain;
 
 import java.security.KeyPair;
@@ -43,20 +45,23 @@ public class AuthorizationServerConfig {
     public RegisteredClientRepository registeredClientRepository(PasswordEncoder encoder) {
         RegisteredClient registeredClient =
                 RegisteredClient.withId(UUID.randomUUID().toString())
-                        .clientId("taco-admin-client")// analogous to username of client
-                        .clientSecret(encoder.encode("secret"))// password for client
-                        //.clientSecret("secret")
+                        .clientId("taco-giangdt")// analogous to username of client
+                        //.clientSecret(encoder.encode("secret"))// password for client
+                        .clientSecret("{noop}giangsecret") //NoOpPasswordEncoder
                         .clientAuthenticationMethod(
                                 ClientAuthenticationMethod.CLIENT_SECRET_BASIC
+                                //ClientAuthenticationMethod.CLIENT_SECRET_POST
                         )
                         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                         .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                        .redirectUri("http://127.0.0.1:9090/login/oauth2/code/taco-admin-client")
+                        .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                        .redirectUri("https://oidcdebugger.com/debug")
+                        .redirectUri("http://127.0.0.1:9090/login/oauth2/code/taco-giangdt-oidc")
                         .scope("writeIngredients")
                         .scope("deleteIngredients")
                         .scope(OidcScopes.OPENID)
                         .clientSettings(
-                                clientSettings -> clientSettings.requireUserConsent(true)
+                                ClientSettings.builder().requireAuthorizationConsent(true).build()
                         )
                         .build();
 
@@ -89,5 +94,11 @@ public class AuthorizationServerConfig {
     @Bean
     public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource){
         return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
+    }
+
+    @Bean
+    public ProviderSettings providerSettings(){
+        return ProviderSettings.builder()
+                .issuer("http://localhost:9000").build();
     }
 }
