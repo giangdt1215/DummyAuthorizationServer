@@ -74,7 +74,6 @@ public class AuthorizationServerConfig {
                         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                         .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                         .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                        .redirectUri("https://oidcdebugger.com/debug")
                         .redirectUri("http://127.0.0.1:8080/authorized")
                         .scope("writeIngredients")
                         .scope("deleteIngredients")
