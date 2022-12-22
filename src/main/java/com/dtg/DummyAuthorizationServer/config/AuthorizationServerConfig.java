@@ -67,14 +67,14 @@ public class AuthorizationServerConfig {
                 RegisteredClient.withId(UUID.randomUUID().toString())
                         .clientId("taco-giangdt")// analogous to username of client
                         //.clientSecret(encoder.encode("secret"))// password for client
-                        .clientSecret("{noop}secret") //NoOpPasswordEncoder
+                        .clientSecret("secret") //NoOpPasswordEncoder
                         .clientAuthenticationMethod(
                                 ClientAuthenticationMethod.CLIENT_SECRET_BASIC
                         )
                         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                         .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                         .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                        .redirectUri("http://127.0.0.1:8080/authorized")
+                        .redirectUri("http://127.0.0.1:9000/login/oauth2/code/taco-giangdt")
                         .scope("writeIngredients")
                         .scope("deleteIngredients")
                         .scope(OidcScopes.OPENID)
